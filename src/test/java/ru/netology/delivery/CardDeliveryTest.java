@@ -24,32 +24,30 @@ public class CardDeliveryTest {
     @Test
     @DisplayName("Should successful plan meeting")
     void ShouldSuccessfulPlanMeeting() {
-        Object validUser = DataGenerator.Registration.generateUser("ru");
+        DataGenerator.UserInfo validUser = DataGenerator.Registration.generateUser("ru");
         int daysToAddForFirstMeeting = 4;
         String firstMeetingDate = DataGenerator.generateDate(daysToAddForFirstMeeting);
         int daysToAddForSecondMeeting = 7;
         String secondMeetingDate = DataGenerator.generateDate(daysToAddForSecondMeeting);
-        $("[data-test-id=city] input").setValue(DataGenerator.generateCity());
-        $("[data-test-id=data] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
-        $("[data-test-id=data] input").setValue(firstMeetingDate);
-        $("[data-test-id=name] input").setValue(DataGenerator.generateName("ru"));
-        $("[data-test-id=phone] input").setValue(DataGenerator.generatePhone("ru"));
+        $("[data-test-id=city] .input_control").setValue(validUser.getCity());
+        $("[data-test-id=data] .input_control").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
+        $("[data-test-id=data] .input_control").setValue(firstMeetingDate);
+        $("[data-test-id=name] .input_control").setValue(validUser.getName());
+        $("[data-test-id=phone] .input_control").setValue(validUser.getPhone());
         $("[data-test-id=agreement]").click();
         $(byText("Запланировать")).click();
-        $(byText("Успешно !")).shouldBe(visible, Duration.ofSeconds(15));
-        $("[data-test-id='success-notification'] .notification__content");
-        $("input").shouldHave(exactText("Встреча успешно запланирована на " + firstMeetingDate));
-        $("[data-test-id=data] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
-        $("[data-test-id=data] input").setValue(secondMeetingDate);
+        $(byText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+        $("[data-test-id='success-notification'] .notification__title");
+        $(".notification__content").shouldHave(exactText("Встреча успешно запланирована на " + firstMeetingDate));
+        $("[data-test-id=data] .notification__content").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
+        $("[data-test-id=data] .notification__content").setValue(secondMeetingDate);
         $(byText("Запланировать")).click();
-        $("[data-test-id='replan-notification'] .notification__content");
-        $("input").shouldHave(exactText("У вас уже запланирована встреча на другую дату. Перепланировать?"));
+        $("[data-test-id='replan-notification'] .button__text");
+        $(".notification__content").shouldHave(exactText("У вас уже запланирована встреча на другую дату. Перепланировать?"));
         $("[data-test-id='replan-notification'] button").click();
         $("[data-test-id='success-notification'] .notification__content");
-        $("input").shouldHave(exactText("Встреча успешно запланирована на " + secondMeetingDate));
+        $(".notification__content").shouldHave(exactText("Встреча успешно запланирована на " + secondMeetingDate));
     }
-
-
 
 
 }
